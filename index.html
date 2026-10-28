@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Khushiii ♡</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Georgia, "Times New Roman", serif;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,.65), transparent 28%),
+      radial-gradient(circle at 80% 15%, rgba(255,190,210,.45), transparent 25%),
+      linear-gradient(135deg, #ffe4ec, #fff7f4 48%, #ffd5e3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5b263b;
+  }
+
+  .card {
+    width: min(92vw, 620px);
+    min-height: 520px;
+    padding: 48px 28px;
+    border: 1px solid rgba(255,255,255,.8);
+    border-radius: 32px;
+    background: rgba(255,255,255,.48);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 25px 70px rgba(130, 49, 80, .18);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+  }
+
+  .heart {
+    font-size: 64px;
+    animation: pulse 1.5s infinite;
+    filter: drop-shadow(0 8px 12px rgba(190,55,100,.22));
+  }
+
+  h1 {
+    margin: 12px 0 8px;
+    font-size: clamp(34px, 7vw, 54px);
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+  }
+
+  .subtitle {
+    margin: 0 0 10px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #87465e;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .question {
+    margin: 20px 0 6px;
+    font-size: clamp(23px, 5vw, 34px);
+    line-height: 1.35;
+  }
+
+  .date {
+    font-family: Arial, sans-serif;
+    margin: 12px 0 30px;
+    font-size: 17px;
+    color: #a23e62;
+    font-weight: 700;
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    min-height: 120px;
+    width: 100%;
+    position: relative;
+  }
+
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 16px 32px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: transform .35s ease, box-shadow .35s ease, left .25s ease, top .25s ease;
+    position: relative;
+    touch-action: manipulation;
+  }
+
+  #yes {
+    color: white;
+    background: linear-gradient(135deg, #d94d78, #b92f5e);
+    box-shadow: 0 12px 25px rgba(185,47,94,.25);
+    z-index: 3;
+  }
+
+  #yes:hover { transform: scale(1.06); }
+
+  #no {
+    color: #8a415b;
+    background: rgba(255,255,255,.82);
+    border: 1px solid rgba(160,65,95,.16);
+    box-shadow: 0 8px 20px rgba(100,30,60,.10);
+    z-index: 4;
+  }
+
+  #message {
+    min-height: 28px;
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    color: #a23e62;
+    font-size: 14px;
+  }
+
+  .float-heart {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    opacity: 0;
+    animation: floatUp linear forwards;
+    z-index: 1;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    15% { opacity: .65; }
+    100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; }
+  }
+
+  @media (max-width: 520px) {
+    .card { min-height: 480px; padding: 35px 18px; }
+    .buttons { gap: 10px; }
+    button { padding: 14px 24px; font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="heart">♡</div>
+  <div class="subtitle">A little question for</div>
+  <h1>Khushiii</h1>
+
+  <div class="question">Will you go on a date with me?</div>
+  <div class="date">31 October 2026 · Just you & me ♡</div>
+
+  <div class="buttons" id="buttonArea">
+    <button id="yes">Yes ♡</button>
+    <button id="no">No</button>
+  </div>
+
+  <div id="message"></div>
+</div>
+
+<script>
+  const yes = document.getElementById("yes");
+  const no = document.getElementById("no");
+  const area = document.getElementById("buttonArea");
+  const message = document.getElementById("message");
+
+  let yesScale = 1;
+  let noClicks = 0;
+
+  const noMessages = [
+    "Are you sure? ♡",
+    "Think again, Khushiii...",
+    "The No button seems shy now.",
+    "Okay okay... but look how big Yes is getting ♡",
+    "I think the universe wants you to click Yes."
+  ];
+
+  no.addEventListener("click", () => {
+    noClicks++;
+
+    // Make Yes bigger every time No is clicked.
+    yesScale = Math.min(1 + noClicks * 0.22, 3.2);
+    yes.style.transform = `scale(${yesScale})`;
+
+    // Move No to a random position inside the button area.
+    const areaRect = area.getBoundingClientRect();
+    const noRect = no.getBoundingClientRect();
+
+    no.style.position = "absolute";
+
+    const maxX = Math.max(0, areaRect.width - noRect.width);
+    const maxY = Math.max(0, areaRect.height - noRect.height);
+
+    const x = Math.random() * maxX - areaRect.width / 2 + noRect.width / 2;
+    const y = Math.random() * maxY - areaRect.height / 2 + noRect.height / 2;
+
+    no.style.left = `calc(50% + ${x}px)`;
+    no.style.top = `calc(50% + ${y}px)`;
+    no.style.transform = "translate(-50%, -50%)";
+
+    message.textContent = noMessages[Math.min(noClicks - 1, noMessages.length - 1)];
+  });
+
+  yes.addEventListener("click", () => {
+    document.querySelector(".card").innerHTML = `
+      <div class="heart">♥</div>
+      <h1 style="font-size: clamp(18px, 4.2vw, 32px); margin: 24px 0 16px; line-height: 1.4; word-break: keep-all; text-wrap: balance;">
+        abb yes kiyaa h to unblock bhi kar hi dee 😋, <span style="white-space: nowrap;">Khushiii ♡</span>
+      </h1>
+    `;
+    for (let i = 0; i < 45; i++) setTimeout(createHeart, i * 60);
+  });
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "float-heart";
+    heart.textContent = Math.random() > .25 ? "♥" : "♡";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (14 + Math.random() * 25) + "px";
+    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 9000);
+  }
+
+  setInterval(createHeart, 900);
+</script>
+</body>
+</html>
